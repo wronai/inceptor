@@ -4,19 +4,29 @@ Inceptor CLI - Command Line Interface
 """
 # Standard library imports
 import json
+import os
+import subprocess
 import sys
+from datetime import datetime
+from pathlib import Path
 from dataclasses import asdict
-from typing import Optional, Dict, Any, List
+from typing import Optional, Dict, Any, List, Union, cast
 
 # Third-party imports
 import click
 import yaml
 from rich.console import Console
+from rich.panel import Panel
+from rich.prompt import Prompt, Confirm
 from rich.syntax import Syntax
 from rich.json import JSON
+from rich.table import Table
+from rich.tree import Tree
+from rich.progress import Progress, SpinnerColumn, TextColumn
 
 # Local application imports
 from .core import DreamArchitect
+from .core.models import Solution, Level, Component, Relationship
 
 # Initialize console for rich output
 console = Console()
@@ -25,8 +35,11 @@ console = Console()
 class CLI:
     """Command Line Interface for Inceptor"""
     
-    def __init__(self):
+    def __init__(self) -> None:
         self.architect = DreamArchitect()
+        self.current_solution: Optional[Solution] = None
+        self.history: List[Dict[str, Any]] = []
+        self.workspace_dir: Path = Path.home() / ".inceptor"
 
 
 def print_help():
