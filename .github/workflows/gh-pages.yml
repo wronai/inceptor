@@ -2,13 +2,13 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
   pages: write
   id-token: write
 
@@ -17,71 +17,48 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v4
         with:
-          python-version: '3.12'
-          cache: 'pip'
-          cache-dependency-path: '**/pyproject.toml'
+          python-version: '3.11'
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install \
-            mkdocs-material \
-            mkdocstrings[python] \
-            mkdocs-material-extensions
-          if [ -f requirements-docs.txt ]; then
-            pip install -r requirements-docs.txt
-          fi
+          pip install mkdocs-material mkdocs-awesome-pages-plugin mkdocs-minify-plugin
 
       - name: Build documentation
         run: |
-          # Create public directory if it doesn't exist
-          mkdir -p public
-          # Build the documentation (temporarily without strict mode)
           mkdocs build --verbose
-          # Ensure the CNAME file exists for custom domain (if needed)
-          echo 'wronai.github.io' > public/CNAME
-          # Copy the built files to the public directory
-          cp -r site/. public/
+          # Verify the site directory exists
+          if [ ! -d "site" ]; then
+            echo "Error: site directory was not created!"
+            ls -la
+            exit 1
+          fi
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
-        with:
-          # Deploy to root path
-          static_site_generator: 'custom'
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./public
-          retention-days: 1
-
-      # Add a step to validate the public directory before uploading the artifact
-      - name: Validate public directory
-        run: |
-          if [ ! -d "public" ]; then
-            echo "Error: public directory does not exist. Ensure documentation is built correctly."
-            exit 1
-          fi
-          echo "Contents of public directory:"
-          ls -l public
+          path: ./site
 
   deploy:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    needs: build-and-deploy
+    needs: build
     if: github.ref == 'refs/heads/main'
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v3
+        uses: actions/deploy-pages@v4
