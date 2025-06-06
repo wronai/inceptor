@@ -26,14 +26,18 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.x'
+          python-version: '3.12'
           cache: 'pip'
           cache-dependency-path: '**/pyproject.toml'
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install mkdocs-material mkdocstrings[python] mkdocs-awesome-pages-plugin
+          if [ -f requirements-docs.txt ]; then
+            pip install -r requirements-docs.txt
+          else
+            pip install mkdocs-material mkdocstrings[python] mkdocs-awesome-pages-plugin
+          fi
 
       - name: Build documentation
         run: mkdocs build --strict --verbose --site-dir public
