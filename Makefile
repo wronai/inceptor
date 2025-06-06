@@ -152,6 +152,7 @@ check: lint test  ## Run all checks (lint and test)
 ##@ Build
 build:  ## Build package
 	@echo "$(YELLOW)Building package...$(RESET)"
+	$(POETRY) version patch
 	$(POETRY) build
 	@echo "$(GREEN)✓ Package built in dist/$(RESET)"
 
