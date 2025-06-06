@@ -2,12 +2,24 @@
 """
 Inceptor CLI - Command Line Interface
 """
+# Standard library imports
+import json
+import sys
+from dataclasses import asdict
+from typing import Optional, Dict, Any, List
 
+# Third-party imports
 import click
-from typing import Optional, Dict, Any
+import yaml
+from rich.console import Console
+from rich.syntax import Syntax
+from rich.json import JSON
 
-# Import our DreamArchitect
+# Local application imports
 from .core import DreamArchitect
+
+# Initialize console for rich output
+console = Console()
 
 
 class CLI:

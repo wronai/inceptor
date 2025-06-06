@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "inceptor"
-version = "0.1.0"
+version = "0.1.1"
 description = "Multi-Level Solution Architecture Generator powered by Ollama Mistral:7b"
 authors = ["Your Name <your.email@example.com>"]
 readme = "README.md"
