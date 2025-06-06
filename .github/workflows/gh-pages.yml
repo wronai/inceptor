@@ -36,10 +36,7 @@ jobs:
           pip install \
             mkdocs-material \
             mkdocstrings[python] \
-            mkdocs-awesome-pages-plugin \
-            mkdocs-git-revision-date-localized-plugin \
-            mkdocs-minify-plugin \
-            mkdocs-plugin-tags
+            mkdocs-material-extensions
           if [ -f requirements-docs.txt ]; then
             pip install -r requirements-docs.txt
           fi
