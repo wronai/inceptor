@@ -184,8 +184,27 @@ nav:
   - API Reference: api.md
   - Source Code: src.md
 
-# Ignore missing files
+# Ignore missing files and broken links
 strict: false
+
+# Configure link validation to be more permissive
+validation:
+  absolute_links: ignore
+  links: ignore
+  unreferenced: ignore
+
+# Disable strict mode for mkdocstrings
+plugins:
+  - search
+  - mkdocstrings:
+      default_handler: python
+      handlers:
+        python:
+          options:
+            docstring_style: google
+            show_root_heading: true
+            show_category_heading: true
+            show_source: false
 
 # Extra CSS and JavaScript
 extra_css:

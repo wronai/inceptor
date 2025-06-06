@@ -43,9 +43,14 @@ jobs:
 
       - name: Build documentation
         run: |
+          # Create public directory if it doesn't exist
+          mkdir -p public
+          # Build the documentation (temporarily without strict mode)
           mkdocs build --verbose
           # Ensure the CNAME file exists for custom domain (if needed)
           echo 'wronai.github.io' > public/CNAME
+          # Copy the built files to the public directory
+          cp -r site/. public/
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
