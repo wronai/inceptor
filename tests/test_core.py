@@ -10,10 +10,12 @@ class TestDreamArchitect:
         architect = DreamArchitect()
         assert architect is not None
 
-    def test_generate_architecture(self):
+    def test_inception_architecture(self):
         """Test basic architecture generation."""
         architect = DreamArchitect()
-        result = architect.generate("test prompt")
-        assert isinstance(result, dict)
-        assert "levels" in result
-        assert isinstance(result["levels"], list)
+        result = architect.inception("test prompt")
+        assert hasattr(result, 'problem')
+        assert hasattr(result, 'architecture')
+        assert hasattr(result, 'tasks')
+        assert hasattr(result, 'implementation')
+        assert hasattr(result, 'metadata')

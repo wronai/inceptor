@@ -17,11 +17,22 @@ class TestCLI:
         assert result.exit_code == 0
         assert 'Show this message and exit.' in result.output
 
-    def test_cli_generate(self, runner):
+    def test_cli_generate(self, runner, mocker):
         """Test the generate command."""
+        # Mock the DreamArchitect.inception method
+        mock_inception = mocker.patch('inceptor.cli.DreamArchitect.inception')
+        mock_inception.return_value = {
+            'problem': 'test prompt',
+            'architecture': {},
+            'tasks': [],
+            'implementation': {},
+            'metadata': {}
+        }
+        
         result = runner.invoke(cli, ['generate', 'test prompt'])
         assert result.exit_code == 0
         assert 'test prompt' in result.output
+        mock_inception.assert_called_once()
 
     @pytest.mark.skip(reason="Interactive shell test needs mocking")
     def test_cli_shell(self, runner):

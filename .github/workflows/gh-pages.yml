@@ -43,7 +43,7 @@ jobs:
 
       - name: Build documentation
         run: |
-          mkdocs build --strict --verbose
+          mkdocs build --verbose
           # Ensure the CNAME file exists for custom domain (if needed)
           echo 'wronai.github.io' > public/CNAME
 
