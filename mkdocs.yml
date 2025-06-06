@@ -2,11 +2,11 @@
 site_name: Inceptor - Multi-Level Solution Architecture Generator
 site_description: "AI-powered solution architecture generator using Ollama Mistral:7b with Inception-inspired multi-level approach"
 site_author: "Inceptor Development Team"
-site_url: "https://yourusername.github.io/inceptor"
+site_url: "https://wronai.github.io/inceptor"
 
 # Repository
-repo_name: "yourusername/inceptor"
-repo_url: "https://github.com/yourusername/inceptor"
+repo_name: "wronai/inceptor"
+repo_url: "https://github.com/wronai/inceptor"
 edit_uri: "edit/main/docs/"
 
 # Copyright

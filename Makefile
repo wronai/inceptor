@@ -6,7 +6,8 @@ PIP := pip
 POETRY := $(shell command -v poetry 2> /dev/null || echo "poetry")
 
 # Source directory
-SRC_DIR := src
+SRC_DIR := src/inceptor
+CORE_DIR := $(SRC_DIR)/core
 
 # Environment
 PYTHON_ENV := .venv
@@ -59,6 +60,11 @@ install-dev:  ## Install development dependencies
 	$(POETRY) install --with dev
 	@echo "$(GREEN)✓ Development dependencies installed$(RESET)"
 
+install-hooks:  ## Install git hooks
+	@echo "$(YELLOW)Installing pre-commit hooks...$(RESET)"
+	$(POETRY) run pre-commit install
+	@echo "$(GREEN)✓ Pre-commit hooks installed$(RESET)"
+
 install-deps:  ## Install runtime dependencies
 	@echo "$(YELLOW)Installing runtime dependencies...$(RESET)"
 	$(POETRY) install --extras "cli"
@@ -91,6 +97,16 @@ start-dev: check-env  ## Start development server
 	@echo "$(YELLOW)Starting development server...$(RESET)"
 	@$(POETRY) run uvicorn inceptor.api:app --reload --port $(DEV_PORT)
 
+
+start-ollama:  ## Start Ollama server (required for local development)
+	@echo "$(YELLOW)Starting Ollama server...$(RESET)
+	@echo "$(YELLOW)Note: Keep this running in a separate terminal$(RESET)"
+	ollama serve
+
+run-example:  ## Run the example script
+	@echo "$(YELLOW)Running example...$(RESET)"
+	$(POETRY) run python -m inceptor.inceptor
+
 start-prod: check-env  ## Start production server
 	@echo "$(YELLOW)Starting production server on port $(PROD_PORT)...$(RESET)"
 	@$(POETRY) run uvicorn inceptor.api:app --host 0.0.0.0 --port $(PROD_PORT)
@@ -103,6 +119,21 @@ start-docker:  ## Start using Docker
 test:  ## Run tests
 	@echo "$(YELLOW)Running tests...$(RESET)"
 	$(POETRY) run pytest $(TEST_PATH) -v
+
+test-cov:  ## Run tests with coverage
+	@echo "$(YELLOW)Running tests with coverage...$(RESET)"
+	$(POETRY) run pytest --cov=$(SRC_DIR) --cov-report=term-missing --cov-report=html $(TEST_PATH) -v
+
+lint:  ## Run all linters
+	@echo "$(YELLOW)Running linters...$(RESET)"
+	$(POETRY) run black --check $(SRC_DIR) $(TEST_PATH)
+	$(POETRY) run flake8 $(SRC_DIR) $(TEST_PATH)
+	$(POETRY) run mypy $(SRC_DIR) $(TEST_PATH)
+
+format:  ## Format code
+	@echo "$(YELLOW)Formatting code...$(RESET)"
+	$(POETRY) run black $(SRC_DIR) $(TEST_PATH)
+	$(POETRY) run isort $(SRC_DIR) $(TEST_PATH)
 
 ##@ Lint
 lint:  ## Run linters
@@ -168,8 +199,13 @@ docs:  ## Generate documentation
 	@$(POETRY) run mkdocs build
 
 serve-docs:  ## Serve documentation locally
-	@echo "$(YELLOW)Serving documentation at http://localhost:$(DOCS_PORT)$(NC)"
+	@echo "$(YELLOW)Serving documentation at http://localhost:$(DOCS_PORT)$(RESET)"
 	@$(POETRY) run mkdocs serve -a 127.0.0.1:$(DOCS_PORT)
+
+update-docs:  ## Update API documentation
+	@echo "$(YELLOW)Updating API documentation...$(RESET)"
+	@$(POETRY) run mkdocs build --clean
+	@echo "$(GREEN)✓ Documentation updated$(RESET)"
 
 ##@ Build & Publish
 build:  ## Build package
@@ -195,10 +231,20 @@ docker-logs:  ## Show Docker logs
 
 ##@ Cleanup
 clean:  ## Clean build artifacts
-	@echo "$(YELLOW)Cleaning build artifacts...$(NC)"
+	@echo "$(YELLOW)Cleaning build artifacts...$(RESET)"
 	@rm -rf build/ dist/ *.egg-info/ htmlcov/ .coverage .pytest_cache/
 	@find . -name '*.pyc' -delete
 	@find . -name '__pycache__' -delete
+
+clean-docs:  ## Clean documentation build
+	@echo "$(YELLOW)Cleaning documentation...$(RESET)"
+	@rm -rf site/
+
+clean-all: clean clean-docs  ## Clean everything
+	@echo "$(YELLOW)Cleaning everything...$(RESET)"
+	@rm -rf .mypy_cache/ .pytest_cache/ .coverage htmlcov/
+	@find . -name '*.pyc' -delete -o -name '__pycache__' -delete -o -name '.pytest_cache' -delete
+	@echo "$(GREEN)✓ All clean!$(RESET)"
 	@echo "$(GREEN)✓ Clean complete$(NC)"
 
 clean-all: clean  ## Clean everything (including Docker)

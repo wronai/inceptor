@@ -2,6 +2,8 @@
 
 **AI-Powered Multi-Level Solution Architecture Generator**
 
+> **Note**: This project has been refactored for better maintainability and organization. The core functionality remains the same, but the code is now more modular and easier to extend.
+
 [![PyPI version](https://img.shields.io/pypi/v/inceptor)](https://pypi.org/project/inceptor/)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/wronai/inceptor/blob/main/LICENSE)
 [![Python Version](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
@@ -39,6 +41,9 @@ pip install inceptor
 git clone https://github.com/wronai/inceptor.git
 cd inceptor
 make install  # Installs in development mode with all dependencies
+
+# Start Ollama server (if not already running)
+ollama serve
 ```
 
 ### Basic Usage
@@ -54,27 +59,62 @@ inceptor shell
 ### Using the Python API
 
 ```python
-from inceptor import Architect
+from inceptor import DreamArchitect, Solution, ArchitectureLevel
 
 # Create an architect instance
-architect = Architect()
+architect = DreamArchitect()
 
 # Generate a solution
-solution = architect.generate(
-    "E-commerce platform with microservices",
-    context={
-        "cloud_provider": "aws",
-        "container_orchestrator": "kubernetes",
-        "monitoring": ["prometheus", "grafana"],
-        "budget": "medium"
-    },
-    levels=4
-)
+problem = """
+I need a task management system for a small development team.
+The team consists of 5 people and uses Python, FastAPI, and PostgreSQL.
+The system should have a web interface and REST API.
+"""
 
-# Export to different formats
-print(solution.to_markdown())  # Markdown
-print(solution.to_json())      # JSON
-print(solution.to_yaml())      # YAML
+# Generate solution with 3 levels of detail
+solution = architect.inception(problem, max_levels=3)
+
+# Access solution components
+print(f"Problem: {solution.problem}")
+print(f"Components: {len(solution.architecture.get('limbo', {}).get('components', []))}")
+print(f"Tasks: {len(solution.tasks)}")
+
+# Save to JSON
+import json
+from dataclasses import asdict, is_dataclass
+
+def convert_dataclass(obj):
+    if is_dataclass(obj):
+        return {k: convert_dataclass(v) for k, v in asdict(obj).items()}
+    elif isinstance(obj, (list, tuple)):
+        return [convert_dataclass(x) for x in obj]
+    elif isinstance(obj, dict):
+        return {k: convert_dataclass(v) for k, v in obj.items()}
+    elif hasattr(obj, 'name'):  # For Enums
+        return obj.name
+    return obj
+
+with open("solution.json", "w") as f:
+    json.dump(convert_dataclass(solution), f, indent=2, ensure_ascii=False)
+```
+
+## 🏗️ Project Structure
+
+After refactoring, the project has a cleaner, more modular structure:
+
+```
+src/inceptor/
+├── __init__.py           # Package exports and version
+├── inceptor.py           # Compatibility layer
+└── core/                 # Core functionality
+    ├── __init__.py       # Core package exports
+    ├── enums.py          # ArchitectureLevel enum
+    ├── models.py         # Solution and Task dataclasses
+    ├── context_extractor.py # Context extraction utilities
+    ├── ollama_client.py  # Ollama API client
+    ├── prompt_templates.py # Prompt templates for each level
+    ├── dream_architect.py # Main architecture generation logic
+    └── utils.py          # Utility functions
 ```
 
 ## 🏗️ Multi-Level Architecture
@@ -101,12 +141,22 @@ Inceptor structures architectures across 5 levels of detail:
 
 2. Set up the development environment:
    ```bash
+   # Install Python dependencies
    make install
+   
+   # Install pre-commit hooks
+   pre-commit install
+   
+   # Start Ollama server (in a separate terminal)
+   ollama serve
    ```
 
 ### Common Tasks
 
 ```bash
+# Install development dependencies
+make install
+
 # Run tests
 make test
 
@@ -122,7 +172,7 @@ make format
 # Build documentation
 make docs
 
-# Run documentation server
+# Run documentation server (http://localhost:8001)
 make serve-docs
 
 # Build package
@@ -130,6 +180,9 @@ make build
 
 # Clean up
 make clean
+
+# Run a local example
+python -m src.inceptor.inceptor
 ```
 
 ## 📚 Documentation

@@ -7,7 +7,7 @@ readme = "README.md"
 license = "Apache-2.0"
 homepage = "https://github.com/wronai/inceptor"
 repository = "https://github.com/wronai/inceptor"
-documentation = "https://inceptor.readthedocs.io"
+documentation = "https://wronai.github.io/inceptor"
 keywords = ["ai", "architecture", "llm", "ollama", "solution-generator", "mistral"]
 classifiers = [
     "Development Status :: 3 - Alpha",
@@ -247,7 +247,7 @@ per-file-ignores = [
 "Bug Tracker" = "https://github.com/wronai/inceptor/issues"
 "Changelog" = "https://github.com/wronai/inceptor/blob/main/CHANGELOG.md"
 "Discussions" = "https://github.com/wronai/inceptor/discussions"
-"Documentation" = "https://inceptor.readthedocs.io"
+"Documentation" = "https://wronai.github.io/inceptor"
 
 # Custom build configuration
 [tool.poetry.build]
