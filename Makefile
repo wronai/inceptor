@@ -208,14 +208,6 @@ update-docs:  ## Update API documentation
 	@$(POETRY) run mkdocs build --clean
 	@echo "$(GREEN)✓ Documentation updated$(RESET)"
 
-##@ Build & Publish
-build:  ## Build package
-	@echo "$(YELLOW)Building package...$(NC)"
-	@$(POETRY) build
-
-publish: build  ## Publish package to PyPI
-	@echo "$(YELLOW)Publishing package...$(NC)"
-	@$(POETRY) publish
 
 ##@ Docker
 docker-up:  ## Start Docker containers

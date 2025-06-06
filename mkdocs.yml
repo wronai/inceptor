@@ -140,47 +140,6 @@ plugins:
             show_symbol_type_heading: true
             show_symbol_type_toc: true
             members_order: source
-            group_by_category: true
-            docstring_style: google
-            docstring_options:
-              ignore_init_summary: true
-            merge_init_into_class: true
-            show_signature_annotations: true
-            separate_signature: true
-  - minify:
-      minify_html: true
-      minify_js: true
-      minify_css: true
-  - privacy:
-      anonymize_ip: true
-      auto_download_resources: false
-  - social:
-      cards: true
-      cards_align: left
-      cards_layout: horizontal
-      cards_color: blue
-      cards_size: medium
-      cards_columns: 3
-      cards_style: material
-      cards_icons: true
-      cards_share: true
-      cards_platforms:
-        - name: Twitter
-          icon: fontawesome/brands/twitter
-          share: https://twitter.com/intent/tweet?url=$url&text=$title
-        - name: LinkedIn
-          icon: fontawesome/brands/linkedin
-          share: https://www.linkedin.com/sharing/share-offsite/?url=$url
-        - name: Facebook
-          icon: fontawesome/brands/facebook
-          share: https://www.facebook.com/sharer/sharer.php?u=$url
-        - name: Email
-          icon: fontawesome/solid/envelope
-          share: mailto:?subject=$title&body=$url
-        - name: Copy Link
-          icon: fontawesome/solid/link
-          share: $url
-          copy: true
 
 # Customization
 extra:
