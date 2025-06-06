@@ -1,0 +1,64 @@
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+    -   id: trailing-whitespace
+    -   id: end-of-file-fixer
+    -   id: check-yaml
+    -   id: check-json
+    -   id: check-added-large-files
+        args: [--maxkb=5000]
+    -   id: detect-aws-credentials
+    -   id: detect-private-key
+
+-   repo: https://github.com/psf/black
+    rev: 23.3.0
+    hooks:
+    -   id: black
+        language_version: python3.10
+
+-   repo: https://github.com/PyCQA/flake8
+    rev: 6.0.0
+    hooks:
+    -   id: flake8
+        additional_dependencies: [flake8-bugbear, flake8-comprehensions]
+
+-   repo: https://github.com/ansible/ansible-lint
+    rev: v6.17.0
+    hooks:
+    -   id: ansible-lint
+        files: ".*\.(yaml|yml)$"
+
+-   repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.0.292
+    hooks:
+    -   id: ruff
+        args: [--fix, --exit-non-zero-on-fix]
+
+-   repo: https://github.com/antonbabenko/pre-commit-terraform
+    rev: v1.81.0
+    hooks:
+    -   id: terraform_fmt
+    -   id: terraform_tflint
+    -   id: terraform_docs
+    -   id: terraform_tfsec
+
+-   repo: https://github.com/pre-commit/mirrors-eslint
+    rev: v8.44.0
+    hooks:
+    -   id: eslint
+        additional_dependencies:
+          - eslint@8.44.0
+          - eslint-config-prettier@8.8.0
+          - eslint-plugin-react@7.32.2
+        files: \.(js|jsx|ts|tsx)$
+        args: [--fix, --max-warnings=0]
+
+-   repo: local
+    hooks:
+    -   id: security
+        name: Check for security issues
+        entry: ./scripts/security_scan.sh
+        language: script
+        always_run: true
+        pass_filenames: false

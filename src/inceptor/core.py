@@ -1,0 +1,5 @@
+# DreamArchitect class
+"""
+core.py
+"""
+

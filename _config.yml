@@ -1,0 +1,47 @@
+# Site settings
+title: Tom Sapletta - Portfolio
+description: DevOps Engineer & Full Stack Developer
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "https://sapletta.github.io" # the base hostname & protocol for your site
+
+theme: jekyll-theme-cayman
+
+# Build settings
+markdown: kramdown
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+
+# Exclude from processing
+# The following items will not be processed, by default.
+# Any item listed under the `exclude:` key here will be automatically added to the
+# internal default list.
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
+  - README.md
+  - package.json
+  - package-lock.json
+  - .gitignore
+  - .git
+
+# Portfolio settings
+collections:
+  portfolio:
+    output: true
+    permalink: /portfolio/:path/
+
+defaults:
+  - scope:
+      path: ""
+      type: portfolio
+    values:
+      layout: portfolio
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: post
