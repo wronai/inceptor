@@ -1,118 +1,83 @@
 #!/usr/bin/env python3
 """
-DreamArchitect CLI - Interactive Shell Client
-Requires: pip install click rich tabulate pyyaml
+Inceptor CLI - Command Line Interface
 """
 
 import click
-import json
-import yaml
-import os
-import sys
-from pathlib import Path
-from typing import Dict, Any, Optional
-from datetime import datetime
-import subprocess
-from dataclasses import asdict
+from typing import Optional, Dict, Any
 
-# Rich for beautiful output
-from rich.console import Console
-from rich.table import Table
-from rich.panel import Panel
-from rich.progress import Progress, SpinnerColumn, TextColumn
-from rich.prompt import Prompt, Confirm
-from rich.syntax import Syntax
-from rich.tree import Tree
-from rich.json import JSON
-
-# Import our DreamArchitect library
-try:
-    from inceptor import DreamArchitect, quick_solution, analyze_context, Solution
-except ImportError:
-    print("❌ DreamArchitect library not found. Make sure it's in your Python path.")
-    sys.exit(1)
-
-console = Console()
+# Import our DreamArchitect
+from .core import DreamArchitect
 
 
-class DreamCLI:
-    """Interactive CLI for DreamArchitect"""
-
+class CLI:
+    """Command Line Interface for Inceptor"""
+    
     def __init__(self):
-        self.config_file = Path.home() / '.dream_architect_config.yaml'
-        self.history_file = Path.home() / '.dream_architect_history.json'
-        self.config = self.load_config()
-        self.architect = DreamArchitect(self.config.get('ollama_url', 'http://localhost:11434'))
-        self.history = self.load_history()
-
-    def load_config(self) -> Dict:
-        """Load configuration from file"""
-        default_config = {
-            'ollama_url': 'http://localhost:11434',
-            'default_levels': 3,
-            'output_format': 'rich',
-            'auto_save': True,
-            'workspace': str(Path.home() / 'dream_architect_workspace')
-        }
-
-        if self.config_file.exists():
-            with open(self.config_file, 'r') as f:
-                config = yaml.safe_load(f)
-                return {**default_config, **config}
-        else:
-            self.save_config(default_config)
-            return default_config
-
-    def save_config(self, config: Dict):
-        """Save configuration to file"""
-        with open(self.config_file, 'w') as f:
-            yaml.dump(config, f, default_flow_style=False)
-
-    def load_history(self) -> list:
-        """Load command history"""
-        if self.history_file.exists():
-            with open(self.history_file, 'r') as f:
-                return json.load(f)
-        return []
-
-    def save_history(self):
-        """Save command history"""
-        with open(self.history_file, 'w') as f:
-            json.dump(self.history[-100:], f, indent=2)  # Keep last 100 entries
-
-    def add_to_history(self, command: str, result: Any):
-        """Add command to history"""
-        entry = {
-            'timestamp': datetime.now().isoformat(),
-            'command': command,
-            'success': result is not None
-        }
-        self.history.append(entry)
-        if self.config.get('auto_save', True):
-            self.save_history()
+        self.architect = DreamArchitect()
 
 
-class DreamShell:
-    """Interactive shell for DreamArchitect"""
+def print_help():
+    """Print help message"""
+    help_text = """
+Inceptor - AI-Powered Multi-Level Solution Architecture Generator
 
-    def __init__(self):
-        self.cli = DreamCLI()
-        self.current_solution: Optional[Solution] = None
-        self.workspace = Path(self.cli.config.get('workspace', './dream_workspace'))
-        self.workspace.mkdir(exist_ok=True)
+Usage:
+  inceptor [OPTIONS] COMMAND [ARGS]...
 
-    def show_banner(self):
-        """Display welcome banner"""
-        banner = """
-╔══════════════════════════════════════╗
-║        🌀 DREAM ARCHITECT CLI        ║
-║   Multi-Level Solution Generator     ║
-║        Powered by Mistral:7b         ║
-╚══════════════════════════════════════╝
-        """
-        console.print(Panel(banner, style="bold blue"))
-        console.print("Type 'help' for commands or 'exit' to quit\n")
+Options:
+  --help  Show this message and exit.
 
+Commands:
+  generate  Generate solution architecture
+  shell     Start interactive shell
+  help      Show this help message
+    """
+    click.echo(help_text)
+
+
+@click.group()
+@click.version_option()
+@click.pass_context
+def cli(ctx):
+    """Inceptor CLI - Multi-Level Solution Architecture Generator"""
+    ctx.obj = CLI()
+
+
+@cli.command()
+@click.argument('prompt', required=False)
+@click.pass_obj
+def generate(cli_obj, prompt: Optional[str] = None):
+    """Generate solution architecture"""
+    if not prompt:
+        prompt = click.prompt('Enter your architecture description', type=str)
+    
+    result = cli_obj.architect.generate(prompt)
+    click.echo(f"Generated architecture for: {result['prompt']}")
+    for level in result['levels']:
+        click.echo(f"- {level['name']}: {level['description']}")
+    return result
+
+
+@cli.command()
+def shell():
+    """Start interactive shell"""
+    click.echo("Starting interactive shell... (Not implemented yet)")
+    click.echo("Type 'exit' to quit.")
+    while True:
+        try:
+            cmd = click.prompt('inceptor> ', type=str)
+            if cmd.lower() in ('exit', 'quit'):
+                break
+            # Add more commands here
+            click.echo(f"Command: {cmd}")
+        except (KeyboardInterrupt, EOFError):
+            break
+    click.echo("Goodbye!")
+
+
+if __name__ == "__main__":
+    cli()
     def cmd_help(self):
         """Show help"""
         table = Table(title="Available Commands")

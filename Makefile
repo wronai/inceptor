@@ -353,17 +353,13 @@ version:
 	@echo "Current version: $(shell grep -m 1 "## \[" CHANGELOG.md | grep -o "\[.*\]" | tr -d "[]")"
 
 # Publish to all registries
-publish: publish-npm publish-pypi publish-docker
-
-# Publish to NPM
-publish-npm: check-env
-	@echo "Publishing to NPM..."
-	cd react-app && \
-	npm config set //registry.npmjs.org/:_authToken=${NPM_TOKEN} && \
-	npm publish --access public
+publish:  publish-pypi
 
 # Publish to PyPI
 publish-pypi: check-env build
+	@echo "Building package..."
+	poetry version patch
+	poetry build
 	@echo "Publishing to PyPI..."
 	@if [ -z "$$PYPI_TOKEN" ]; then \
 		echo "Error: PYPI_TOKEN not found in .env file"; \
@@ -371,18 +367,8 @@ publish-pypi: check-env build
 		exit 1; \
 	fi
 	@echo "Using PyPI token for authentication"
-	@python -m twine upload -u __token__ -p "$$PYPI_TOKEN" dist/*
-
-# Publish to Docker Hub
-publish-docker: check-env
-	@echo "Publishing to Docker Hub..."
-	@echo "TODO: Add Docker publishing logic"
-
-# Update portfolio data and generate thumbnails/icons
-update-portfolio:
-	@echo "Updating portfolio data and generating assets..."
-	node scripts/update-portfolio.js
-	@echo "Portfolio update complete!"
+	#@python -m twine upload -u __token__ -p "$$PYPI_TOKEN" dist/*
+	poetry publish
 
 # Create a new release
 release: version
