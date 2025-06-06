@@ -482,8 +482,17 @@ def shell():
 @click.argument('problem')
 @click.option('--levels', '-l', default=3, help='Architecture depth (1-5)')
 @click.option('--output', '-o', type=click.Choice(['json', 'yaml', 'summary']), default='summary')
-def dream(problem, levels, output):
-    """Generate solution architecture"""
+def dream(problem: str, levels: Optional[int], output: Optional[str]) -> int:
+    """Generate solution architecture
+    
+    Args:
+        problem: The problem description to generate a solution for
+        levels: Number of architecture levels to generate
+        output: Optional output file path to save the solution
+        
+    Returns:
+        int: Exit code (0 for success, 1 for error)
+    """
     architect = DreamArchitect()
 
     console.print(f"🌀 Generating {levels}-level architecture...")

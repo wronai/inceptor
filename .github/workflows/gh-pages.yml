@@ -31,7 +31,13 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install mkdocs-material mkdocs-awesome-pages-plugin mkdocs-minify-plugin mkdocstrings mkdocs-material-extensions
+          pip install \
+            mkdocs-material \
+            mkdocs-awesome-pages-plugin \
+            mkdocs-minify-plugin \
+            mkdocstrings[python] \
+            mkdocs-material-extensions \
+            pygments
 
       - name: Build documentation
         run: |

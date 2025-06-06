@@ -185,47 +185,43 @@ nav:
   - API Reference: api.md
   - Source Code: src.md
 
-# Ignore missing files and broken links
-strict: false
+# Strict mode for better error reporting
+strict: true
 
-# Configure link validation to be more permissive
+# Validation settings
 validation:
-  absolute_links: ignore
-  relative_links: ignore
+  omitted_files: warn
+  absolute_links: warn
+  relative_links: warn
   unrecognized_links: warn
 
-# Disable strict mode for mkdocstrings
+# Plugins configuration
 plugins:
-  - search
+  - search:
+      lang: en
+      separator: '[\s\-,:!=\[\]()"/]+|(?!\b)(?=[A-Z][a-z])|\.(?!\d)|&[lg]t;'
   - mkdocstrings:
       default_handler: python
       handlers:
         python:
           options:
-            docstring_style: google
+            show_source: true
             show_root_heading: true
+            show_root_full_path: false
+            show_root_members_full_path: false
             show_category_heading: true
-            show_source: false
-
-# Extra CSS and JavaScript
-extra_css:
-  - assets/stylesheets/custom.css
-  - assets/stylesheets/termynal.css
-
-extra_javascript:
-  - assets/javascripts/custom.js
-  - assets/javascripts/termynal.js
-  - https://polyfill.io/v3/polyfill.min.js?features=es6
-  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+            show_symbol_type_heading: true
+            show_symbol_type_toc: true
+            members_order: source
+            docstring_style: google
+            merge_init_into_class: true
+            show_signature_annotations: true
+            separate_signature: true
+  - minify:
+      minify_html: true
 
 # Development server
 dev_addr: "127.0.0.1:8000"
 
 # Build directory
 site_dir: "site"
-
-# Validation
-validation:
-  omitted_files: warn
-  absolute_links: warn
-  unrecognized_links: warn
