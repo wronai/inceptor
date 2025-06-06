@@ -1,6 +1,6 @@
 [run]
 source = src
-omit = 
+omit =
     */tests/*
     */__pycache__/*
     */_version.py
@@ -24,7 +24,7 @@ exclude_lines =
     if 0:
     if __name__ == .__main__.:
     # Don't complain about abstract methods
-    @(abc\.)?abstractmethod
+    @(abc\\.)?abstractmethod
     # Type checking
     if TYPE_CHECKING:
     # Ignore async for/with
