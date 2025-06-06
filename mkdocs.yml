@@ -178,8 +178,9 @@ extra:
 # Page tree
 nav:
   - Home: index.md
-  - Installation: installation.md
-  - Quick Start: quick-start.md
+  - Getting Started:
+    - Installation: installation.md
+    - Quick Start: quick-start.md
   - Features: features.md
   - API Reference: api.md
   - Source Code: src.md
@@ -190,8 +191,8 @@ strict: false
 # Configure link validation to be more permissive
 validation:
   absolute_links: ignore
-  links: ignore
-  unreferenced: ignore
+  relative_links: ignore
+  unrecognized_links: warn
 
 # Disable strict mode for mkdocstrings
 plugins:
