@@ -75,7 +75,7 @@ theme:
       example: octicons/beaker-16
       quote: octicons/quote-16
 
-  custom_dir: "docs/overrides"
+  custom_dir: docs/overrides
 
 # Extensions
 markdown_extensions:
@@ -254,12 +254,12 @@ nav:
 
 # Extra CSS and JavaScript
 extra_css:
-  - assets/css/custom.css
-  - assets/css/termynal.css
+  - assets/stylesheets/custom.css
+  - assets/stylesheets/termynal.css
 
 extra_javascript:
-  - assets/js/custom.js
-  - assets/js/termynal.js
+  - assets/javascripts/custom.js
+  - assets/javascripts/termynal.js
   - https://polyfill.io/v3/polyfill.min.js?features=es6
   - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
 
