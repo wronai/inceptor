@@ -6,8 +6,14 @@ from unittest.mock import MagicMock
 
 import pytest
 
-# Add src to Python path
-sys.path.insert(0, str(Path(__file__).parent.parent / 'src'))
+# Add project root and src to Python path
+project_root = Path(__file__).parent.parent
+src_dir = project_root / 'src'
+sys.path.insert(0, str(project_root))
+sys.path.insert(0, str(src_dir))
+
+# Ensure the package can be imported
+os.environ['PYTHONPATH'] = f"{src_dir}:{os.environ.get('PYTHONPATH', '')}"
 
 # Fixtures
 @pytest.fixture
