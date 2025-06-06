@@ -4,12 +4,15 @@
 
 > **Note**: This project has been refactored for better maintainability and organization. The core functionality remains the same, but the code is now more modular and easier to extend.
 
-[![PyPI version](https://img.shields.io/pypi/v/inceptor)](https://pypi.org/project/inceptor/)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/wronai/inceptor/blob/main/LICENSE)
-[![Python Version](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
-[![Documentation Status](https://img.shields.io/badge/docs-latest-brightgreen.svg)](https://wronai.github.io/inceptor/)
-[![Tests](https://github.com/wronai/inceptor/actions/workflows/tests.yml/badge.svg)](https://github.com/wronai/inceptor/actions/workflows/tests.yml)
-[![Code Style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![PyPI Version](https://img.shields.io/pypi/v/inceptor?color=blue&logo=pypi&logoColor=white)](https://pypi.org/project/inceptor/)
+[![Python Version](https://img.shields.io/pypi/pyversions/inceptor?logo=python&logoColor=white)](https://www.python.org/downloads/)
+[![License](https://img.shields.io/github/license/wronai/inceptor?color=blue)](https://github.com/wronai/inceptor/blob/main/LICENSE)
+[![Documentation](https://img.shields.io/badge/docs-mkdocs%20material-blue.svg?style=flat&logo=read-the-docs)](https://wronai.github.io/inceptor/)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/wronai/inceptor/gh-pages.yml?branch=main&label=docs%20build)](https://github.com/wronai/inceptor/actions/workflows/gh-pages.yml)
+[![Code Style: Black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Imports: isort](https://img.shields.io/badge/imports-isort-ef8336.svg)](https://pycqa.github.io/isort/)
+[![Type Checker: mypy](https://img.shields.io/badge/type%20checker-mypy-blue.svg)](http://mypy-lang.org/)
+[![Linter: flake8](https://img.shields.io/badge/linter-flake8-3776ab.svg)](https://flake8.pycqa.org/)
 
 Inceptor is a powerful AI-powered tool that helps you design, generate, and implement complex software architectures using natural language. Built with Ollama's Mistral:7b model, it creates multi-level architecture designs that evolve from high-level concepts to detailed implementation plans.
 
