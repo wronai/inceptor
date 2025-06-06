@@ -115,7 +115,7 @@ start-docker:  ## Start using Docker
 	@echo "$(YELLOW)Starting with Docker...$(RESET)"
 	@$(DOCKER_COMPOSE) up --build
 
-##@ Test
+##@ Test & Lint
 test:  ## Run tests
 	@echo "$(YELLOW)Running tests...$(RESET)"
 	$(POETRY) run pytest $(TEST_PATH) -v
@@ -125,18 +125,6 @@ test-cov:  ## Run tests with coverage
 	$(POETRY) run pytest --cov=$(SRC_DIR) --cov-report=term-missing --cov-report=html $(TEST_PATH) -v
 
 lint:  ## Run all linters
-	@echo "$(YELLOW)Running linters...$(RESET)"
-	$(POETRY) run black --check $(SRC_DIR) $(TEST_PATH)
-	$(POETRY) run flake8 $(SRC_DIR) $(TEST_PATH)
-	$(POETRY) run mypy $(SRC_DIR) $(TEST_PATH)
-
-format:  ## Format code
-	@echo "$(YELLOW)Formatting code...$(RESET)"
-	$(POETRY) run black $(SRC_DIR) $(TEST_PATH)
-	$(POETRY) run isort $(SRC_DIR) $(TEST_PATH)
-
-##@ Lint
-lint:  ## Run linters
 	@echo "$(YELLOW)Running linters...$(RESET)"
 	$(POETRY) run black --check $(SRC_DIR) $(TEST_PATH)
 	$(POETRY) run flake8 $(SRC_DIR) $(TEST_PATH)

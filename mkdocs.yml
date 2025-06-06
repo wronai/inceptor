@@ -3,6 +3,10 @@ site_name: Inceptor - Multi-Level Solution Architecture Generator
 site_description: "AI-powered solution architecture generator using Ollama Mistral:7b with Inception-inspired multi-level approach"
 site_author: "Inceptor Development Team"
 site_url: "https://wronai.github.io/inceptor"
+  
+# Serve from root
+docs_dir: docs
+site_dir: public
 
 # Repository
 repo_name: "wronai/inceptor"
@@ -127,7 +131,6 @@ plugins:
       lang: en
       separator: '[\s\-,:!=\[\]()"/]+|(?!\b)(?=[A-Z][a-z])|\.(?!\d)|&[lg]t;'
   - mkdocstrings:
-      enabled: true
       default_handler: python
       handlers:
         python:
@@ -140,6 +143,10 @@ plugins:
             show_symbol_type_heading: true
             show_symbol_type_toc: true
             members_order: source
+            docstring_style: google
+            merge_init_into_class: true
+            show_signature_annotations: true
+            separate_signature: true
 
 # Customization
 extra:
@@ -234,13 +241,6 @@ extra_javascript:
   - assets/javascripts/termynal.js
   - https://polyfill.io/v3/polyfill.min.js?features=es6
   - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
-
-# Watch additional files
-watch:
-  - docs/
-  - inceptor.py
-  - cli.py
-  - README.md
 
 # Development server
 dev_addr: "127.0.0.1:8000"
