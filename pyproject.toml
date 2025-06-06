@@ -28,7 +28,7 @@ classifiers = [
 packages = [{include = "inceptor", from = "src"}]
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = ">=3.9,<4.0"
 requests = "^2.31.0"
 pydantic = "^2.5.0"
 click = "^8.1.7"
@@ -39,6 +39,10 @@ jinja2 = "^3.1.2"
 pathlib = "^1.0.1"
 dataclasses-json = "^0.6.3"
 typing-extensions = "^4.8.0"
+python-dotenv = "^1.0.0"
+python-multipart = "^0.0.6"
+fastapi = {version = "^0.104.0", optional = true}
+uvicorn = {version = "^0.24.0", optional = true}
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.4.3"
@@ -73,15 +77,51 @@ mkdocstrings = "^0.24.0"
 mkdocstrings-python = "^1.7.5"
 
 [tool.poetry.scripts]
-dream = "inceptor.cli:cli"
-dream-shell = "inceptor.cli:shell"
 inceptor = "inceptor.cli:cli"
+inceptor-shell = "inceptor.cli:shell"
 
 [tool.poetry.extras]
-cli = ["click", "rich", "tabulate"]
-visualization = ["matplotlib", "plotly", "graphviz"]
-export = ["jinja2", "markdown", "pandoc"]
-cloud = ["boto3", "azure-storage-blob", "google-cloud-storage"]
+cli = [
+    "click",
+    "rich",
+    "tabulate",
+    "pyyaml",
+    "python-dotenv",
+    "python-multipart"
+]
+server = [
+    "fastapi",
+    "uvicorn"
+]
+visualization = [
+    "matplotlib",
+    "plotly",
+    "graphviz"
+]
+export = [
+    "jinja2",
+    "markdown",
+    "pandoc"
+]
+cloud = [
+    "boto3",
+    "azure-storage-blob",
+    "google-cloud-storage"
+]
+dev = [
+    "pytest",
+    "pytest-cov",
+    "pytest-mock",
+    "black",
+    "flake8",
+    "mypy",
+    "isort",
+    "pre-commit",
+    "sphinx",
+    "sphinx-rtd-theme",
+    "mkdocs",
+    "mkdocs-material"
+]
 
 [build-system]
 requires = ["poetry-core"]
@@ -90,7 +130,7 @@ build-backend = "poetry.core.masonry.api"
 # Tool configurations
 [tool.black]
 line-length = 88
-target-version = ['py38', 'py39', 'py310', 'py311']
+target-version = ['py38', 'py39', 'py310', 'py311', 'py312', 'py313', 'py314']
 include = '\.pyi?$'
 extend-exclude = '''
 /(

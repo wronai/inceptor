@@ -1,16 +1,25 @@
-# Port configurations
-DEV_PORT := 8003
-PROD_PORT := 8001
-PORTFOLIO_PORT := 8000
+# Project information
+PROJECT_NAME := inceptor
+PACKAGE_NAME := inceptor
 PYTHON := python3
-NPM := npm
-DOCKER_COMPOSE := docker-compose
-DOCKER := docker
+PIP := pip
+POETRY := poetry
+
+# Environment
 PYTHON_ENV := .venv
-PYTHON_BIN := $(PYTHON_ENV)/bin/python
-PIP := $(PYTHON_ENV)/bin/pip
-PYTEST := $(PYTHON_ENV)/bin/pytest
-NODE_MODULES := node_modules
+PYTHON_BIN := python3
+PIP := pip
+POETRY := $(shell command -v poetry 2> /dev/null || echo "poetry")
+
+# Development
+DEV_PORT := 8000
+TEST_PATH := tests/
+COVERAGE_REPORT := htmlcov/
+DOCKER_COMPOSE := docker-compose
+
+# Documentation
+DOCS_PORT := 8001
+DOCS_DIR := docs
 
 # Colors
 GREEN  := $(shell tput -Txterm setaf 2)
@@ -18,35 +27,60 @@ YELLOW := $(shell tput -Txterm setaf 3)
 WHITE  := $(shell tput -Txterm setaf 7)
 RESET  := $(shell tput -Txterm sgr0)
 
-# PID files
-PORTFOLIO_PID := /tmp/portfolio_server.pid
+# Helpers
+PYTHON_PACKAGES := $(PACKAGE_NAME) tests
+PYTHON_FILES := $(shell find $(PYTHON_PACKAGES) -name '*.py' -o -name '*.pyi')
 
-# Project directories
-REACT_APP_DIR := react-app
-DIST_DIR := $(REACT_APP_DIR)/dist
-
-.PHONY: help build run test clean publish version deps deps-js setup-env check-env \
-        publish-npm publish-pypi publish-docker update-portfolio setup-tokens \
-        start start-dev start-prod stop stop-all status install format lint setup setup-venv \
-        install-python install-js install-deps check-env clean clean-pyc clean-node clean-docker
+.PHONY: help all install install-dev install-deps install-server clean clean-pyc clean-test clean-docs \
+        lint test format check start start-dev start-prod start-docker \
+        docs serve-docs build publish release
 
 ##@ Help
 help:  ## Display this help
-	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make \033[36m<target>\033[0m\n"} /^[a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
+	@echo "$(YELLOW)Inceptor - Multi-Level Solution Architecture Generator$(RESET)"
+	@echo "\n$(WHITE)Usage: make $(GREEN)<target>$(RESET)"
+	@echo "\n$(YELLOW)Development:$(RESET)"
+	@echo "  $(GREEN)install$(RESET)      - Install package in development mode with all dependencies"
+	@echo "  $(GREEN)install-dev$(RESET)  - Install development dependencies"
+	@echo "  $(GREEN)test$(RESET)         - Run tests quickly with the default Python"
+	@echo "  $(GREEN)test-cov$(RESET)     - Run tests with coverage report"
+	@echo "  $(GREEN)lint$(RESET)         - Check code style with flake8 and mypy"
+	@echo "  $(GREEN)format$(RESET)       - Format code with black and isort"
+	@echo "  $(GREEN)check$(RESET)        - Run all checks (lint, test, format)"
+	@echo "\n$(YELLOW)Documentation:$(RESET)"
+	@echo "  $(GREEN)docs$(RESET)         - Generate documentation"
+	@echo "  $(GREEN)serve-docs$(RESET)   - Start documentation server"
+	@echo "\n$(YELLOW)Packaging:$(RESET)"
+	@echo "  $(GREEN)build$(RESET)        - Build package"
+	@echo "  $(GREEN)publish$(RESET)      - Publish package to PyPI"
+	@echo "  $(GREEN)release$(RESET)      - Create a new release (bump version, tag, push)"
+	@echo "\n$(YELLOW)Cleanup:$(RESET)"
+	@echo "  $(GREEN)clean$(RESET)        - Remove build artifacts and Python cache"
+	@echo "  $(GREEN)clean-pyc$(RESET)    - Remove Python file artifacts"
+	@echo "  $(GREEN)clean-test$(RESET)   - Remove test and coverage artifacts"
+	@echo "  $(GREEN)clean-docs$(RESET)   - Remove documentation build artifacts"
 
 ##@ Development
-setup: setup-venv install-deps check-env  ## Setup development environment
+install:  ## Install package in development mode with all dependencies
+	@echo "$(YELLOW)Installing package in development mode...$(RESET)"
+	$(PYTHON) -m pip install --upgrade pip
+	$(POETRY) install --with dev --extras "cli server"
+	@echo "$(GREEN)✓ Package installed in development mode$(RESET)"
 
-setup-venv:  ## Create Python virtual environment
-	@echo "$(YELLOW)Setting up Python virtual environment...$(RESET)"
-	$(PYTHON) -m venv $(PYTHON_ENV) || (echo "Failed to create virtual environment. Make sure python3-venv is installed." && exit 1)
-	@echo "$(GREEN)✓ Virtual environment created$(RESET)"
+install-dev:  ## Install development dependencies
+	@echo "$(YELLOW)Installing development dependencies...$(RESET)"
+	$(POETRY) install --with dev
+	@echo "$(GREEN)✓ Development dependencies installed$(RESET)"
 
-install-python:  ## Install Python dependencies
-	@echo "$(YELLOW)Installing Python dependencies...$(RESET)
-	$(PIP) install --upgrade pip
-	$(PIP) install -r requirements.txt
-	@echo "$(GREEN)✓ Python dependencies installed$(RESET)"
+install-deps:  ## Install runtime dependencies
+	@echo "$(YELLOW)Installing runtime dependencies...$(RESET)"
+	$(POETRY) install --extras "cli"
+	@echo "$(GREEN)✓ Runtime dependencies installed$(RESET)"
+
+install-server:  ## Install server dependencies
+	@echo "$(YELLOW)Installing server dependencies...$(RESET)"
+	$(POETRY) install --extras "server"
+	@echo "$(GREEN)✓ Server dependencies installed$(RESET)"
 
 install-js:  ## Install JavaScript dependencies
 	@echo "$(YELLOW)Installing JavaScript dependencies...$(RESET)
@@ -68,15 +102,32 @@ start: start-dev  ## Alias for start-dev
 
 start-dev: check-env  ## Start development server
 	@echo "$(YELLOW)Starting development server...$(RESET)"
-	@$(PYTHON_BIN) server.py $(DEV_PORT)
+	@$(POETRY) run uvicorn inceptor.api:app --reload --port $(DEV_PORT)
 
 start-prod: check-env  ## Start production server
 	@echo "$(YELLOW)Starting production server on port $(PROD_PORT)...$(RESET)"
-	@$(PYTHON_BIN) server.py $(PROD_PORT)
+	@$(POETRY) run uvicorn inceptor.api:app --host 0.0.0.0 --port $(PROD_PORT)
 
 start-docker:  ## Start using Docker
 	@echo "$(YELLOW)Starting with Docker...$(RESET)"
 	@$(DOCKER_COMPOSE) up --build
+
+test:  ## Run tests
+	@echo "$(YELLOW)Running tests...$(RESET)"
+	@$(POETRY) run pytest $(TEST_PATH) -v
+
+lint:  ## Run linters
+	@echo "$(YELLOW)Running linters...$(RESET)"
+	@$(POETRY) run black --check $(PACKAGE_NAME) $(TEST_PATH)
+	@$(POETRY) run flake8 $(PACKAGE_NAME) $(TEST_PATH)
+	@$(POETRY) run mypy $(PACKAGE_NAME) $(TEST_PATH)
+
+format:  ## Format code
+	@echo "$(YELLOW)Formatting code...$(RESET)"
+	@$(POETRY) run black $(PACKAGE_NAME) $(TEST_PATH)
+	@$(POETRY) run isort $(PACKAGE_NAME) $(TEST_PATH)
+
+check: lint test  ## Run all checks (lint and test)
 
 ##@ Cleanup
 clean: clean-pyc clean-node clean-docker  ## Remove all build, test, coverage and Python artifacts

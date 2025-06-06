@@ -533,6 +533,50 @@ def context(text):
 
 
 @cli.command()
+@click.argument('problem')
+@click.option('--context', '-c', help='JSON string with custom context', default='{}')
+@click.option('--levels', '-l', default=4, help='Architecture depth (1-5)')
+@click.option('--output', '-o', type=click.Choice(['json', 'yaml', 'summary']), default='summary')
+def generate(problem, context, levels, output):
+    """Generate solution architecture with custom context
+    
+    Example:
+        inceptor generate "CI/CD pipeline for a Python microservice" \
+            --context '{"cloud_provider": "aws", "container_orchestrator": "kubernetes"}'
+    """
+    try:
+        # Parse the context JSON string
+        context_dict = json.loads(context)
+        
+        architect = DreamArchitect()
+        console.print(f"🌀 Generating {levels}-level architecture with custom context...")
+        
+        solution = architect.inception(
+            problem,
+            max_levels=levels,
+            additional_context=context_dict
+        )
+
+        if output == 'json':
+            console.print(JSON(json.dumps(asdict(solution), indent=2)))
+        elif output == 'yaml':
+            console.print(Syntax(yaml.dump(asdict(solution), default_flow_style=False), "yaml"))
+        else:
+            console.print(f"✅ Solution generated for: [bold]{problem}[/bold]")
+            console.print(f"📊 Levels: {levels}")
+            console.print(f"🏗️  Components: {len(solution.architecture.get('limbo', {}).get('components', []))}")
+            console.print("\nCustom context used:")
+            console.print_json(data=context_dict)
+
+    except json.JSONDecodeError:
+        console.print("❌ Error: Invalid JSON in context parameter", style="red")
+        sys.exit(1)
+    except Exception as e:
+        console.print(f"❌ Error: {str(e)}", style="red")
+        sys.exit(1)
+
+
+@cli.command()
 def status():
     """Check system status"""
     try:

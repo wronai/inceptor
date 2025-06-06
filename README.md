@@ -3,9 +3,11 @@
 **AI-Powered Multi-Level Solution Architecture Generator**
 
 [![PyPI version](https://img.shields.io/pypi/v/inceptor)](https://pypi.org/project/inceptor/)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/yourusername/inceptor/blob/main/LICENSE)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/wronai/inceptor/blob/main/LICENSE)
 [![Python Version](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
-[![Documentation Status](https://img.shields.io/badge/docs-latest-brightgreen.svg)](https://yourusername.github.io/inceptor/)
+[![Documentation Status](https://img.shields.io/badge/docs-latest-brightgreen.svg)](https://wronai.github.io/inceptor/)
+[![Tests](https://github.com/wronai/inceptor/actions/workflows/tests.yml/badge.svg)](https://github.com/wronai/inceptor/actions/workflows/tests.yml)
+[![Code Style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 Inceptor is a powerful AI-powered tool that helps you design, generate, and implement complex software architectures using natural language. Built with Ollama's Mistral:7b model, it creates multi-level architecture designs that evolve from high-level concepts to detailed implementation plans.
 
@@ -21,36 +23,45 @@ Inceptor is a powerful AI-powered tool that helps you design, generate, and impl
 
 ## 🚀 Quick Start
 
-1. **Install Inceptor** (requires Python 3.8+):
-   ```bash
-   pip install inceptor
-   ```
+### Prerequisites
 
-2. **Generate your first architecture**:
-   ```bash
-   inceptor "I need a REST API for a todo app with user authentication"
-   ```
+- Python 3.8 or higher
+- [Ollama](https://ollama.ai/) with Mistral:7b model
+- 4GB RAM (minimum)
 
-3. **Or use the interactive shell**:
-   ```bash
-   inceptor shell
-   ```
+### Installation
 
-## 🎯 Examples
+```bash
+# Install from PyPI
+pip install inceptor
+
+# Or install from source
+git clone https://github.com/wronai/inceptor.git
+cd inceptor
+make install  # Installs in development mode with all dependencies
+```
 
 ### Basic Usage
+
+```bash
+# Generate architecture from a description
+inceptor "I need a REST API for a todo app with user authentication"
+
+# Start interactive shell
+inceptor shell
+```
+
+### Using the Python API
+
 ```python
 from inceptor import Architect
 
+# Create an architect instance
 architect = Architect()
-solution = architect.generate("E-commerce platform with microservices")
-print(solution.to_markdown())
-```
 
-### Advanced Usage with Custom Context
-```python
+# Generate a solution
 solution = architect.generate(
-    "CI/CD pipeline for a Python microservice",
+    "E-commerce platform with microservices",
     context={
         "cloud_provider": "aws",
         "container_orchestrator": "kubernetes",
@@ -59,6 +70,11 @@ solution = architect.generate(
     },
     levels=4
 )
+
+# Export to different formats
+print(solution.to_markdown())  # Markdown
+print(solution.to_json())      # JSON
+print(solution.to_yaml())      # YAML
 ```
 
 ## 🏗️ Multi-Level Architecture
@@ -73,44 +89,68 @@ Inceptor structures architectures across 5 levels of detail:
 | 4 | DEEPER | Integration & deployment | CI/CD, Infrastructure |
 | 5 | DEEPEST | Optimization & scaling | Performance, Monitoring |
 
-## 📦 Installation
+## 🛠️ Development
 
-### Prerequisites
-- Python 3.8+
-- [Ollama](https://ollama.ai/) with Mistral:7b model
-- 4GB RAM (minimum)
+### Setup
 
-### Install via pip
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/wronai/inceptor.git
+   cd inceptor
+   ```
+
+2. Set up the development environment:
+   ```bash
+   make install
+   ```
+
+### Common Tasks
+
 ```bash
-pip install inceptor
-```
+# Run tests
+make test
 
-### From Source
-```bash
-git clone https://github.com/yourusername/inceptor.git
-cd inceptor
-pip install -e .
+# Run tests with coverage
+make test-cov
+
+# Check code style
+make lint
+
+# Format code
+make format
+
+# Build documentation
+make docs
+
+# Run documentation server
+make serve-docs
+
+# Build package
+make build
+
+# Clean up
+make clean
 ```
 
 ## 📚 Documentation
 
-For full documentation, please visit [https://yourusername.github.io/inceptor/](https://yourusername.github.io/inceptor/)
+For full documentation, please visit [https://wronai.github.io/inceptor/](https://wronai.github.io/inceptor/)
 
-- [Installation Guide](https://yourusername.github.io/inceptor/installation/)
-- [Quick Start](https://yourusername.github.io/inceptor/quick-start/)
-- [User Guide](https://yourusername.github.io/inceptor/guide/)
-- [API Reference](https://yourusername.github.io/inceptor/api/)
-- [Examples](https://yourusername.github.io/inceptor/examples/)
+- [Installation Guide](https://wronai.github.io/inceptor/installation/)
+- [Quick Start](https://wronai.github.io/inceptor/quick-start/)
+- [User Guide](https://wronai.github.io/inceptor/guide/)
+- [API Reference](https://wronai.github.io/inceptor/api/)
+- [Examples](https://wronai.github.io/inceptor/examples/)
 
 ## 🤝 Contributing
 
 Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md) to get started.
 
 1. Fork the repository
-2. Create a feature branch
-3. Commit your changes
-4. Push to the branch
-5. Open a pull request
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 ## 📄 License
 
