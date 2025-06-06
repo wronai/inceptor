@@ -42,7 +42,7 @@ class CLI:
         self.workspace_dir: Path = Path.home() / ".inceptor"
 
 
-def print_help():
+def print_help() -> None:
     """Print help message"""
     help_text = """
 Inceptor - AI-Powered Multi-Level Solution Architecture Generator
@@ -72,7 +72,7 @@ def cli(ctx):
 @cli.command()
 @click.argument('prompt', required=False)
 @click.pass_obj
-def generate(cli_obj, prompt: Optional[str] = None):
+def generate(cli_obj: CLI, prompt: Optional[str] = None) -> None:
     """Generate solution architecture"""
     if not prompt:
         prompt = click.prompt('Enter your architecture description', type=str)
@@ -85,7 +85,7 @@ def generate(cli_obj, prompt: Optional[str] = None):
 
 
 @cli.command()
-def shell():
+def shell() -> None:
     """Start interactive shell"""
     click.echo("Starting interactive shell... (Not implemented yet)")
     click.echo("Type 'exit' to quit.")
@@ -103,7 +103,7 @@ def shell():
 
 if __name__ == "__main__":
     cli()
-    def cmd_help(self):
+    def cmd_help(self) -> None:
         """Show help"""
         table = Table(title="Available Commands")
         table.add_column("Command", style="cyan")
@@ -132,7 +132,7 @@ if __name__ == "__main__":
 
         console.print(table)
 
-    def cmd_dream(self, problem: str, levels: int = None):
+    def cmd_dream(self, problem: str, levels: int = None) -> None:
         """Generate dream architecture"""
         if not problem:
             problem = Prompt.ask("Enter your problem description")
@@ -160,7 +160,7 @@ if __name__ == "__main__":
                 console.print(f"❌ Error: {str(e)}", style="red")
                 self.cli.add_to_history(f"dream '{problem}' levels={levels}", None)
 
-    def cmd_quick(self, problem: str):
+    def cmd_quick(self, problem: str) -> None:
         """Quick 3-level solution"""
         if not problem:
             problem = Prompt.ask("Enter your problem description")
@@ -175,7 +175,7 @@ if __name__ == "__main__":
         except Exception as e:
             console.print(f"❌ Error: {str(e)}", style="red")
 
-    def cmd_context(self, text: str):
+    def cmd_context(self, text: str) -> None:
         """Analyze context"""
         if not text:
             text = Prompt.ask("Enter text to analyze")
@@ -193,7 +193,7 @@ if __name__ == "__main__":
         console.print(table)
         self.cli.add_to_history(f"context '{text}'", context)
 
-    def cmd_show(self):
+    def cmd_show(self) -> None:
         """Show current solution"""
         if not self.current_solution:
             console.print("❌ No solution loaded. Use 'dream' command first.", style="red")
@@ -207,7 +207,7 @@ if __name__ == "__main__":
         if detail != "none":
             self.show_solution_detail(detail)
 
-    def cmd_save(self, name: str = None):
+    def cmd_save(self, name: str = None) -> None:
         """Save current solution"""
         if not self.current_solution:
             console.print("❌ No solution to save.", style="red")
@@ -223,7 +223,7 @@ if __name__ == "__main__":
 
         console.print(f"✅ Solution saved to: [bold]{save_path}[/bold]")
 
-    def cmd_load(self, name: str):
+    def cmd_load(self, name: str) -> None:
         """Load solution from file"""
         if not name:
             # Show available solutions
@@ -255,7 +255,7 @@ if __name__ == "__main__":
 
         console.print(f"✅ Solution '{name}' loaded.")
 
-    def cmd_export(self, format_type: str = "json"):
+    def cmd_export(self, format_type: str = "json") -> None:
         """Export current solution"""
         if not self.current_solution:
             console.print("❌ No solution to export.", style="red")
@@ -272,7 +272,7 @@ if __name__ == "__main__":
         else:
             console.print(f"❌ Unknown format: {format_type}")
 
-    def cmd_workspace(self):
+    def cmd_workspace(self) -> None:
         """Open workspace directory"""
         console.print(f"📁 Workspace: [bold]{self.workspace}[/bold]")
 
@@ -283,7 +283,7 @@ if __name__ == "__main__":
         else:  # Linux
             subprocess.run(["xdg-open", str(self.workspace)])
 
-    def cmd_history(self):
+    def cmd_history(self) -> None:
         """Show command history"""
         table = Table(title="Command History")
         table.add_column("Time", style="cyan")
@@ -297,7 +297,7 @@ if __name__ == "__main__":
 
         console.print(table)
 
-    def cmd_config(self):
+    def cmd_config(self) -> None:
         """Show/edit configuration"""
         table = Table(title="Configuration")
         table.add_column("Setting", style="cyan")
@@ -311,7 +311,7 @@ if __name__ == "__main__":
         if Confirm.ask("Edit configuration?"):
             self.edit_config()
 
-    def cmd_status(self):
+    def cmd_status(self) -> None:
         """Check Ollama connection"""
         try:
             # Try to connect to Ollama
@@ -323,7 +323,7 @@ if __name__ == "__main__":
             console.print("❌ Ollama connection: [red]FAILED[/red]")
             console.print(f"Error: {str(e)}")
 
-    def cmd_levels(self, levels: int):
+    def cmd_levels(self, levels: int) -> None:
         """Set default architecture levels"""
         if levels < 1 or levels > 5:
             console.print("❌ Levels must be between 1 and 5", style="red")
@@ -333,7 +333,7 @@ if __name__ == "__main__":
         self.cli.save_config(self.cli.config)
         console.print(f"✅ Default levels set to: {levels}")
 
-    def show_solution_summary(self):
+    def show_solution_summary(self) -> None:
         """Display solution summary"""
         if not self.current_solution:
             return
@@ -352,7 +352,7 @@ if __name__ == "__main__":
 
         console.print(tree)
 
-    def show_solution_detail(self, level: str):
+    def show_solution_detail(self, level: str) -> None:
         """Show detailed view of specific level"""
         if not self.current_solution or not hasattr(self.current_solution, 'architecture'):
             return
@@ -364,7 +364,7 @@ if __name__ == "__main__":
 
         console.print(Panel(JSON(json.dumps(data, indent=2)), title=f"{level.upper()} Details"))
 
-    def export_implementation_files(self):
+    def export_implementation_files(self) -> None:
         """Export implementation files to workspace"""
         if not hasattr(self.current_solution, 'implementation'):
             console.print("❌ No implementation to export.", style="red")
@@ -377,7 +377,7 @@ if __name__ == "__main__":
         # of the implementation data from the DreamArchitect
         console.print(f"📁 Files would be exported to: {export_dir}")
 
-    def edit_config(self):
+    def edit_config(self) -> None:
         """Interactive configuration editor"""
         for key, current_value in self.cli.config.items():
             new_value = Prompt.ask(f"{key}", default=str(current_value))
@@ -396,7 +396,7 @@ if __name__ == "__main__":
         self.cli.save_config(self.cli.config)
         console.print("✅ Configuration saved!")
 
-    def run(self):
+    def run(self) -> None:
         """Main shell loop"""
         self.show_banner()
 
@@ -466,7 +466,7 @@ if __name__ == "__main__":
 
 
 @click.group()
-def cli():
+def cli() -> None:
     """DreamArchitect CLI - Multi-Level Solution Generator"""
     pass
 
