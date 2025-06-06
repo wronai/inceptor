@@ -184,6 +184,9 @@ nav:
   - API Reference: api.md
   - Source Code: src.md
 
+# Ignore missing files
+strict: false
+
 # Extra CSS and JavaScript
 extra_css:
   - assets/stylesheets/custom.css
