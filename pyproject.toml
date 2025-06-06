@@ -79,9 +79,9 @@ mkdocstrings = "^0.24.0"
 mkdocstrings-python = "^1.7.5"
 mkdocs-awesome-pages-plugin = "^2.9.2"
 mkdocs-git-revision-date-localized-plugin = "^1.2.5"
+mkdocs-social-plugin = "^0.1.0"
 mkdocs-minify-plugin = "^0.9.0"
 mkdocs-privacy-policy-plugin = "^0.7.0"
-mkdocs-social-plugin = "^2.0.0"
 
 [tool.poetry.scripts]
 inceptor = "inceptor.cli:cli"
