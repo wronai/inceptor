@@ -33,10 +33,17 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
+          pip install \
+            mkdocs-material \
+            mkdocstrings[python] \
+            mkdocs-awesome-pages-plugin \
+            mkdocs-git-revision-date-localized-plugin \
+            mkdocs-minify-plugin \
+            mkdocs-privacy-policy-plugin \
+            mkdocs-social-plugin \
+            mkdocs-tags-plugin
           if [ -f requirements-docs.txt ]; then
             pip install -r requirements-docs.txt
-          else
-            pip install mkdocs-material mkdocstrings[python] mkdocs-awesome-pages-plugin
           fi
 
       - name: Build documentation
