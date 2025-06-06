@@ -3,19 +3,24 @@ PROJECT_NAME := inceptor
 PACKAGE_NAME := inceptor
 PYTHON := python3
 PIP := pip
-POETRY := poetry
+POETRY := $(shell command -v poetry 2> /dev/null || echo "poetry")
 
 # Environment
 PYTHON_ENV := .venv
-PYTHON_BIN := python3
-PIP := pip
-POETRY := $(shell command -v poetry 2> /dev/null || echo "poetry")
+PYTHON_BIN := $(PYTHON_ENV)/bin/python
+PIP := $(PYTHON_ENV)/bin/pip
 
 # Development
 DEV_PORT := 8000
 TEST_PATH := tests/
 COVERAGE_REPORT := htmlcov/
 DOCKER_COMPOSE := docker-compose
+
+# Colors
+GREEN  := $(shell tput -Txterm setaf 2)
+YELLOW := $(shell tput -Txterm setaf 3)
+WHITE  := $(shell tput -Txterm setaf 7)
+RESET  := $(shell tput -Txterm sgr0)
 
 # Documentation
 DOCS_PORT := 8001
@@ -31,14 +36,15 @@ RESET  := $(shell tput -Txterm sgr0)
 PYTHON_PACKAGES := $(PACKAGE_NAME) tests
 PYTHON_FILES := $(shell find $(PYTHON_PACKAGES) -name '*.py' -o -name '*.pyi')
 
-.PHONY: help all install install-dev install-deps install-server clean clean-pyc clean-test clean-docs \
-        lint test format check start start-dev start-prod start-docker \
-        docs serve-docs build publish release
+.PHONY: help install install-dev install-deps install-server \
+        test lint format check build publish clean clean-all
 
 ##@ Help
 help:  ## Display this help
 	@echo "$(YELLOW)Inceptor - Multi-Level Solution Architecture Generator$(RESET)"
 	@echo "\n$(WHITE)Usage: make $(GREEN)<target>$(RESET)"
+	@echo "\n$(YELLOW)Available targets:$(RESET)"
+	@awk 'BEGIN {FS = ":.*##"} /^[a-zA-Z_-]+:.*?##/ { printf "  $(GREEN)%-15s$(RESET) %s\n", $$1, $$2 }' $(MAKEFILE_LIST) | sort
 	@echo "\n$(YELLOW)Development:$(RESET)"
 	@echo "  $(GREEN)install$(RESET)      - Install package in development mode with all dependencies"
 	@echo "  $(GREEN)install-dev$(RESET)  - Install development dependencies"
@@ -60,10 +66,11 @@ help:  ## Display this help
 	@echo "  $(GREEN)clean-test$(RESET)   - Remove test and coverage artifacts"
 	@echo "  $(GREEN)clean-docs$(RESET)   - Remove documentation build artifacts"
 
-##@ Development
+##@ Setup
 install:  ## Install package in development mode with all dependencies
 	@echo "$(YELLOW)Installing package in development mode...$(RESET)"
 	$(PYTHON) -m pip install --upgrade pip
+	$(PYTHON) -m pip install poetry
 	$(POETRY) install --with dev --extras "cli server"
 	@echo "$(GREEN)✓ Package installed in development mode$(RESET)"
 
@@ -112,28 +119,44 @@ start-docker:  ## Start using Docker
 	@echo "$(YELLOW)Starting with Docker...$(RESET)"
 	@$(DOCKER_COMPOSE) up --build
 
+##@ Test
+.PHONY: test
+
 test:  ## Run tests
 	@echo "$(YELLOW)Running tests...$(RESET)"
-	@$(POETRY) run pytest $(TEST_PATH) -v
+	$(POETRY) run pytest $(TEST_PATH) -v
+
+##@ Lint
+.PHONY: lint format check
 
 lint:  ## Run linters
 	@echo "$(YELLOW)Running linters...$(RESET)"
-	@$(POETRY) run black --check $(PACKAGE_NAME) $(TEST_PATH)
-	@$(POETRY) run flake8 $(PACKAGE_NAME) $(TEST_PATH)
-	@$(POETRY) run mypy $(PACKAGE_NAME) $(TEST_PATH)
+	$(POETRY) run black --check $(PACKAGE_NAME) $(TEST_PATH)
+	$(POETRY) run flake8 $(PACKAGE_NAME) $(TEST_PATH)
+	$(POETRY) run mypy $(PACKAGE_NAME) $(TEST_PATH)
 
 format:  ## Format code
 	@echo "$(YELLOW)Formatting code...$(RESET)"
-	@$(POETRY) run black $(PACKAGE_NAME) $(TEST_PATH)
-	@$(POETRY) run isort $(PACKAGE_NAME) $(TEST_PATH)
+	$(POETRY) run black $(PACKAGE_NAME) $(TEST_PATH)
+	$(POETRY) run isort $(PACKAGE_NAME) $(TEST_PATH)
 
 check: lint test  ## Run all checks (lint and test)
 
-##@ Cleanup
-clean: clean-pyc clean-node clean-docker  ## Remove all build, test, coverage and Python artifacts
+##@ Build
+build:  ## Build package
+	@echo "$(YELLOW)Building package...$(RESET)"
+	$(POETRY) build
+	@echo "$(GREEN)✓ Package built in dist/$(RESET)"
 
-clean-pyc:  ## Remove Python file artifacts
-	@echo "$(YELLOW)Cleaning Python cache files...$(RESET)"
+##@ Publish
+publish: build  ## Publish package to PyPI
+	@echo "$(YELLOW)Publishing to PyPI...$(RESET)"
+	$(POETRY) publish
+
+##@ Cleanup
+clean:  ## Remove all build, test, coverage and Python artifacts
+	@echo "$(YELLOW)Cleaning up...$(RESET)"
+	@# Python
 	@find . -name '*.pyc' -type f -delete 2>/dev/null || true
 	@find . -name '*.pyo' -type f -delete 2>/dev/null || true
 	@find . -name '*~' -type f -delete 2>/dev/null || true
@@ -141,6 +164,13 @@ clean-pyc:  ## Remove Python file artifacts
 	@find . -name '.pytest_cache' -type d -exec rm -rf {} + 2>/dev/null || true
 	@rm -f .coverage coverage.xml 2>/dev/null || true
 	@rm -rf htmlcov/ 2>/dev/null || true
+	@# Build artifacts
+	@rm -rf build/ dist/ *.egg-info/ 2>/dev/null || true
+	@echo "$(GREEN)✓ Clean complete$(RESET)"
+
+clean-all: clean  ## Remove all build, test, coverage and Python artifacts (including virtualenvs)
+	@echo "$(YELLOW)Removing virtual environments...$(RESET)"
+	@rm -rf $(PYTHON_ENV) .venv/ 2>/dev/null || true
 
 clean-node:  ## Remove node_modules
 	@echo "$(YELLOW)Cleaning node modules...$(RESET)"
