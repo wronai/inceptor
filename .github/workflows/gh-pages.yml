@@ -64,6 +64,16 @@ jobs:
           path: ./public
           retention-days: 1
 
+      # Add a step to validate the public directory before uploading the artifact
+      - name: Validate public directory
+        run: |
+          if [ ! -d "public" ]; then
+            echo "Error: public directory does not exist. Ensure documentation is built correctly."
+            exit 1
+          fi
+          echo "Contents of public directory:"
+          ls -l public
+
   deploy:
     environment:
       name: github-pages

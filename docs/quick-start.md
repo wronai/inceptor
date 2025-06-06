@@ -50,6 +50,25 @@ inceptor shell
 
 1. **Define your requirements**:
    ```bash
+   inceptor "I need a REST API for a blog with user authentication and comments"
+   ```
+
+2. **Review the generated architecture** in the terminal output
+
+3. **Generate implementation code**:
+   ```bash
+   inceptor "Generate implementation code for the blog API"
+   ```
+
+4. **Save the output** to a file for future reference:
+   ```bash
+   inceptor "Generate implementation code for the blog API" > blog_implementation.md
+   ```
+
+## Advanced Example
+
+1. **Generate a microservices architecture**:
+   ```bash
    inceptor "I need a microservices architecture for an e-commerce platform with:
    - Product catalog
    - User authentication
@@ -67,13 +86,11 @@ inceptor shell
 
 ## Next Steps
 
-- Learn about [Configuration Options](guide/configuration.md)
-- Explore [Advanced Features](guide/advanced-features.md)
-- Check out [Examples](examples/)
-- Read the [CLI Reference](guide/cli-reference.md)
+- Explore more [features](features.md) of Inceptor
+- Check out the [API Reference](api.md) for advanced usage
+- Review the [installation guide](installation.md) for configuration options
 
 ## Getting Help
 
 - Run `inceptor --help` for command-line options
-- Check the [FAQ](about/faq.md) for common questions
-- [Open an issue](https://github.com/yourusername/inceptor/issues) for bugs or feature requests
+- [Open an issue](https://github.com/wronai/inceptor/issues) for bugs or feature requests

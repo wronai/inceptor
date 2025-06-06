@@ -89,5 +89,5 @@ inceptor status
 ## Next Steps
 
 - [Quick Start Guide](quick-start.md)
-- [Configuration Options](guide/configuration.md)
-- [CLI Reference](guide/cli-reference.md)
+- [API Reference](api.md)
+- [Features](features.md)

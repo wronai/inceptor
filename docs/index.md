@@ -1,54 +1,44 @@
-# 📚 Dokumentacja Inceptor - Struktura plików
-
-
-## 📄 Przykładowe pliki dokumentacji:
-
-### docs/index.md
-```markdown
 # 🌀 Inceptor
 
 **Multi-Level Solution Architecture Generator**
 
-Inceptor to potężne narzędzie AI wykorzystujące Ollama Mistral:7b do generowania wielopoziomowych architektur rozwiązań. Inspirowane filmem "Inception", tworzy zagnieżdżone zadania prowadzące do kompletnych implementacji.
+Inceptor is a powerful AI tool that uses Ollama Mistral:7b to generate multi-level solution architectures. Inspired by the movie "Inception", it creates nested tasks leading to complete implementations.
 
-## ✨ Kluczowe funkcje
+## ✨ Key Features
 
-- 🧠 **AI-Powered**: Integracja z Ollama Mistral:7b
-- 🏗️ **Multi-Level**: 3-5 poziomów architektury (LIMBO → DREAM → REALITY → DEEPER → DEEPEST)
-- 🔍 **Context-Aware**: Automatyczna analiza kontekstu z jednego zdania
+- 🧠 **AI-Powered**: Integration with Ollama Mistral:7b
+- 🏗️ **Multi-Level**: 3-5 levels of architecture (LIMBO → DREAM → REALITY → DEEPER → DEEPEST)
+- 🔍 **Context-Aware**: Automatic context analysis from a single sentence
 - 💻 **Interactive CLI**: Rich shell interface
 - 📊 **Structured Output**: JSON/YAML export
-- 🚀 **Zero-Setup**: Działa od razu z lokalnym Ollama
+- 🚀 **Zero-Setup**: Works out of the box with local Ollama
 
 ## 🚀 Quick Start
 
 ```bash
-# Instalacja
+# Installation
 pip install inceptor
 
-# Uruchomienie
-inceptor "potrzebuję system logowania dla Flask + React"
+# Basic usage
+inceptor "I need a login system with Flask + React"
 
-# Interaktywny shell
+# Interactive shell
 inceptor shell
 ```
 
 [Get Started →](quick-start.md){ .md-button .md-button--primary }
-[View Examples →](examples/){ .md-button }
 ```
 
-### docs/installation.md
-```markdown
-# 📦 Instalacja
+## 📦 Installation
 
-## Wymagania systemowe
+### System Requirements
 
 - Python 3.8+
-- Ollama z Mistral:7b model
+- Ollama with Mistral:7b model
 - 4GB RAM (minimum)
-- Połączenie internetowe (do pobrania modelu)
+- Internet connection (for model download)
 
-## Instalacja Ollama
+### Installing Ollama
 
 ### macOS/Linux
 ```bash

@@ -109,5 +109,4 @@ context = analyze_context("I need a secure login system with MFA")
 
 - [Installation Guide](installation.md)
 - [Quick Start](quick-start.md)
-- [Configuration Options](guide/configuration.md)
-- [API Reference](api/)
+- [API Reference](api.md)
