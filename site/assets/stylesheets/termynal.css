@@ -1,0 +1,92 @@
+/* Termynal styles for terminal-like animations */
+.termy {
+    position: relative;
+    background: #252a33;
+    border-radius: 4px;
+    margin: 1.5em 0;
+    padding: 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+}
+
+.termy::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 24px;
+    background: #e0e0e0;
+    border-radius: 4px 4px 0 0;
+    z-index: 1;
+}
+
+.termy::after {
+    content: 'Terminal';
+    position: absolute;
+    top: 3px;
+    left: 12px;
+    color: #424242;
+    font-size: 12px;
+    font-family: var(--md-text-font, "Roboto", "Helvetica", "Arial", sans-serif);
+    z-index: 2;
+}
+
+.termy > pre {
+    margin: 0;
+    padding: 2em 1em 1em;
+    background: transparent !important;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+.termy > pre code {
+    font-family: "Roboto Mono", "SFMono-Regular", "SF Mono", "Menlo", "Consolas", "Liberation Mono", monospace;
+    font-size: 0.85em;
+    line-height: 1.4;
+    color: #f8f8f2;
+    background: transparent !important;
+    padding: 0;
+}
+
+.termy [data-ty] {
+    display: block;
+    line-height: 1.5;
+}
+
+.termy [data-ty]:before {
+    content: '';
+    display: inline-block;
+    vertical-align: middle;
+    width: 10px;
+    height: 20px;
+    margin-right: 8px;
+    background: #ff5f56;
+    border-radius: 50%;
+    opacity: 0.8;
+}
+
+.termy [data-ty]:nth-child(2):before {
+    background: #ffbd2e;
+}
+
+.termy [data-ty]:nth-child(3):before {
+    background: #27c93f;
+}
+
+.termy [data-ty="input"]:before,
+.termy [data-ty-prompt]:before {
+    content: '$';
+    color: #4caf50;
+    background: transparent;
+    font-weight: bold;
+    margin-right: 8px;
+}
+
+.termy [data-ty="input"]:before {
+    color: #ff9800;
+}
+
+.termy [data-ty][data-ty-prompt]:before {
+    content: attr(data-ty-prompt);
+}

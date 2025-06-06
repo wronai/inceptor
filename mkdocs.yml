@@ -177,59 +177,12 @@ extra:
 
 # Page tree
 nav:
-  - Home: 
-    - index.md
-    - Installation: installation.md
-    - Quick Start: quick-start.md
-    - Features: features.md
-  
-  - User Guide:
-    - guide/index.md
-    - Getting Started: guide/getting-started.md
-    - Basic Usage: guide/basic-usage.md
-    - Advanced Features: guide/advanced-features.md
-    - Configuration: guide/configuration.md
-    - CLI Reference: guide/cli-reference.md
-    - Examples: guide/examples.md
-  
-  - Architecture:
-    - architecture/index.md
-    - Overview: architecture/overview.md
-    - Multi-Level Design: architecture/multi-level.md
-    - Prompt Engineering: architecture/prompts.md
-    - Context Extraction: architecture/context.md
-    - Ollama Integration: architecture/ollama.md
-  
-  - API Reference:
-    - api/index.md
-    - Core Classes: api/core.md
-    - CLI Module: api/cli.md
-    - Utilities: api/utils.md
-    - Exceptions: api/exceptions.md
-  
-  - Development:
-    - development/index.md
-    - Contributing: development/contributing.md
-    - Development Setup: development/setup.md
-    - Testing: development/testing.md
-    - Code Style: development/code-style.md
-    - Release Process: development/release.md
-  
-  - Examples & Tutorials:
-    - examples/index.md
-    - Basic Examples: examples/basic.md
-    - Real-world Use Cases: examples/use-cases.md
-    - Integration Examples: examples/integration.md
-    - Custom Prompts: examples/custom-prompts.md
-    - Troubleshooting: examples/troubleshooting.md
-  
-  - About:
-    - about/index.md
-    - Changelog: about/changelog.md
-    - License: about/license.md
-    - FAQ: about/faq.md
-    - Roadmap: about/roadmap.md
-    - Support: about/support.md
+  - Home: index.md
+  - Installation: installation.md
+  - Quick Start: quick-start.md
+  - Features: features.md
+  - API Reference: api.md
+  - Source Code: src.md
 
 # Extra CSS and JavaScript
 extra_css:
