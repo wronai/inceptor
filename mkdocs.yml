@@ -147,26 +147,40 @@ plugins:
             merge_init_into_class: true
             show_signature_annotations: true
             separate_signature: true
-  - awesome-pages:
-      filename: .pages
-      collapse_single_pages: true
-      strict: false
-  - git-revision-date-localized:
-      enable_creation_date: true
-      type: timeago
   - minify:
       minify_html: true
       minify_js: true
       minify_css: true
-      htmlmin_opts:
-        remove_comments: true
-      cache_safe: true
   - privacy:
-      enabled: true
+      anonymize_ip: true
+      auto_download_resources: false
   - social:
-      enabled: false  # Set to true if you want social cards
-  - tags:
-      tags_file: tags.md
+      cards: true
+      cards_align: left
+      cards_layout: horizontal
+      cards_color: blue
+      cards_size: medium
+      cards_columns: 3
+      cards_style: material
+      cards_icons: true
+      cards_share: true
+      cards_platforms:
+        - name: Twitter
+          icon: fontawesome/brands/twitter
+          share: https://twitter.com/intent/tweet?url=$url&text=$title
+        - name: LinkedIn
+          icon: fontawesome/brands/linkedin
+          share: https://www.linkedin.com/sharing/share-offsite/?url=$url
+        - name: Facebook
+          icon: fontawesome/brands/facebook
+          share: https://www.facebook.com/sharer/sharer.php?u=$url
+        - name: Email
+          icon: fontawesome/solid/envelope
+          share: mailto:?subject=$title&body=$url
+        - name: Copy Link
+          icon: fontawesome/solid/link
+          share: $url
+          copy: true
 
 # Customization
 extra:

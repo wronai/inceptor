@@ -39,9 +39,7 @@ jobs:
             mkdocs-awesome-pages-plugin \
             mkdocs-git-revision-date-localized-plugin \
             mkdocs-minify-plugin \
-            mkdocs-privacy-policy-plugin \
-            mkdocs-social-plugin \
-            mkdocs-tags-plugin
+            mkdocs-plugin-tags
           if [ -f requirements-docs.txt ]; then
             pip install -r requirements-docs.txt
           fi

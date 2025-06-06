@@ -324,3 +324,18 @@ Problem: system logowania Flask
 Components: 0
 Tasks: 0
 ```
+
+
+
+## 3. **Przykład**: "system logowania Flask"
+
+```bash
+python inceptor2.py "system logowania Flask"
+```
+
+output:
+```bash
+Problem: system logowania Flask
+Components: 0
+Tasks: 0
+```
