@@ -185,20 +185,25 @@ clean-docker:  ## Stop and remove Docker containers and volumes
 		echo "$(YELLOW)Docker Compose not found, skipping...$(RESET)"; \
 	fi
 
-##@ Default target
-help:
-	@echo "Environment Setup:"
-	@echo "  setup-env       - Create .env file from example"
-	@echo "  setup-tokens    - Interactive setup for API tokens (recommended)"
-	@echo "  check-env       - Verify environment configuration"
-	@echo ""
-	@echo "Development:"
-	@echo "  deps            - Install all project dependencies"
-	@echo "  deps-js         - Install JavaScript dependencies"
-	@echo "  build           - Build the project"
-	@echo "  run             - Run the development server"
-	@echo "  test            - Run tests"
-	@echo "  clean           - Clean build artifacts"
+##@ Documentation
+docs:  ## Generate documentation
+	@echo "$(YELLOW)Generating documentation...$(RESET)"
+	@$(POETRY) run mkdocs build
+	@echo "$(GREEN)✓ Documentation generated in site/$(RESET)"
+
+serve-docs:  ## Serve documentation locally
+	@echo "$(YELLOW)Serving documentation at http://localhost:$(DOCS_PORT)$(RESET)"
+	@$(POETRY) run mkdocs serve -a 127.0.0.1:$(DOCS_PORT)
+
+##@ Release
+release:  ## Create a new release (bump version, tag, push)
+	@echo "$(YELLOW)Creating a new release...$(RESET)"
+	@$(POETRY) version $(VERSION)
+	git add pyproject.toml
+	git commit -m "Bump version to $(shell $(POETRY) version -s)"
+	git tag -a v$(shell $(POETRY) version -s) -m "Version $(shell $(POETRY) version -s)"
+	git push origin --tags
+	@echo "$(GREEN)✓ New release created: v$(shell $(POETRY) version -s)$(RESET)"
 	@echo ""
 	@echo "Versioning:"
 	@echo "  version         - Show current version"
