@@ -35,13 +35,29 @@ jobs:
 
       - name: Build documentation
         run: |
-          mkdocs build --verbose
-          # Verify the site directory exists
-          if [ ! -d "site" ]; then
-            echo "Error: site directory was not created!"
+          # Clean any previous build
+          rm -rf site public
+          
+          # Build documentation with verbose output
+          mkdocs build --verbose --strict || { echo "❌ mkdocs build failed"; exit 1; }
+          
+          # Create public directory and move site contents
+          mkdir -p public
+          cp -r site/. public/
+          
+          # Add CNAME for GitHub Pages
+          echo 'wronai.github.io' > public/CNAME
+          
+          # Verify the build output
+          if [ ! -d "public" ] || [ -z "$(ls -A public)" ]; then
+            echo "❌ Build failed: public directory is empty or missing"
             ls -la
             exit 1
           fi
+          
+          echo "✅ Build completed successfully"
+          echo "Build contents:"
+          ls -la public/
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -49,7 +65,8 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./site
+          path: ./public
+          retention-days: 1
 
   deploy:
     environment:
