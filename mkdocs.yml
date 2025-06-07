@@ -190,10 +190,13 @@ strict: true
 
 # Validation settings
 validation:
-  omitted_files: warn
-  absolute_links: warn
-  relative_links: warn
-  unrecognized_links: warn
+  nav:  # Navigation validation
+    omitted_files: warn  # Warn about files not included in navigation
+    not_found: warn      # Warn about non-existent files in navigation
+  links:  # Link validation
+    not_found: warn      # Warn about broken links
+    absolute_links: warn # Warn about absolute links (use relative links instead)
+    unrecognized_links: warn  # Warn about links that don't match any known pattern
 
 # Plugins configuration
 plugins:

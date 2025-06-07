@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "inceptor"
-version = "0.1.3"
+version = "0.1.5"
 description = "Multi-Level Solution Architecture Generator powered by Ollama Mistral:7b"
 authors = ["Tom Sapletta <info@softreck.dev>"]
 readme = "README.md"

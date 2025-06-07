@@ -17,3 +17,4 @@ black .
 git diff
 act
 mkdocs build --strict
+mkdocs serve
