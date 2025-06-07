@@ -147,6 +147,18 @@ plugins:
             merge_init_into_class: true
             show_signature_annotations: true
             separate_signature: true
+  - minify:
+      minify_html: true
+      minify_js: true
+      minify_css: true
+      htmlmin_opts:
+          remove_comments: true
+          remove_optional_attribute_quotes: false
+          remove_optional_tags: false
+      js_files:
+          - '**/*.js'
+      css_files:
+          - '**/*.css'
 
 # Customization
 extra:
