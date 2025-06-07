@@ -533,57 +533,82 @@ def context(text):
 
 @cli.command()
 @click.argument('problem')
-@click.option('--context', '-c', help='JSON string with custom context', default='{}')
-@click.option('--levels', '-l', default=4, help='Architecture depth (1-5)')
-@click.option('--output', '-o', type=click.Choice(['json', 'yaml', 'summary']), default='summary')
-def generate(problem, context, levels, output):
+@click.option('--context', '-c', help='JSON context for the generation')
+@click.option('--levels', '-l', type=int, default=3, help='Number of architecture levels (1-5)')
+@click.option('--output', '-o', type=click.Path(), help='Output file path')
+def generate(problem: str, context: Optional[str], levels: int, output: Optional[str]) -> int:
     """Generate solution architecture with custom context
     
     Example:
         inceptor generate "CI/CD pipeline for a Python microservice" \
             --context '{"cloud_provider": "aws", "container_orchestrator": "kubernetes"}'
+            
+    Args:
+        problem: The problem description to generate a solution for
+        context: Optional JSON string containing additional context
+        levels: Number of architecture levels to generate (1-5)
+        output: Optional output file path to save the solution
+        
+    Returns:
+        int: Exit code (0 for success, 1 for error)
     """
+    cli = CLI()
+    
     try:
-        # Parse the context JSON string
-        context_dict = json.loads(context)
+        # Parse context if provided
+        context_dict: Dict[str, Any] = {}
+        if context:
+            try:
+                context_dict = json.loads(context)
+            except json.JSONDecodeError:
+                console.print("[red]Error: Invalid JSON context provided[/]")
+                return 1
         
-        architect = DreamArchitect()
-        console.print(f"🌀 Generating {levels}-level architecture with custom context...")
+        # Generate solution
+        with console.status("[bold green]Generating solution..."):
+            solution = cli.architect.inception(
+                problem=problem,
+                context=context_dict,
+                levels=levels
+            )
         
-        solution = architect.inception(
-            problem,
-            max_levels=levels,
-            additional_context=context_dict
-        )
-
-        if output == 'json':
-            console.print(JSON(json.dumps(asdict(solution), indent=2)))
-        elif output == 'yaml':
-            console.print(Syntax(yaml.dump(asdict(solution), default_flow_style=False), "yaml"))
+        # Output results
+        if output:
+            with open(output, 'w') as f:
+                json.dump(asdict(solution), f, indent=2)
+            console.print(f"✅ Solution saved to {output}")
         else:
-            console.print(f"✅ Solution generated for: [bold]{problem}[/bold]")
-            console.print(f"📊 Levels: {levels}")
-            console.print(f"🏗️  Components: {len(solution.architecture.get('limbo', {}).get('components', []))}")
-            console.print("\nCustom context used:")
-            console.print_json(data=context_dict)
-
-    except json.JSONDecodeError:
-        console.print("❌ Error: Invalid JSON in context parameter", style="red")
-        sys.exit(1)
+            console.print(Panel(
+                f"[bold green]Solution Architecture[/]\n\n{json.dumps(asdict(solution), indent=2)}",
+                title="Generated Solution"
+            ))
+            
+        return 0
+        
     except Exception as e:
-        console.print(f"❌ Error: {str(e)}", style="red")
-        sys.exit(1)
+        console.print(f"[red]Error: {str(e)}[/]")
+        return 1
 
 
 @cli.command()
-def status():
-    """Check system status"""
+def status() -> None:
+    """Check system status
+    
+    Returns:
+        None: Outputs status information to the console
+    """
     try:
-        architect = DreamArchitect()
-        response = architect.ollama.generate("test", max_tokens=1)
-        console.print("✅ System Status: [green]OK[/green]")
+        # Check Ollama connection
+        response = requests.get('http://localhost:11434/api/tags')
+        response.raise_for_status()
+        
+        console.print("✅ [green]Ollama is running[/]")
+        console.print(f"📡 API Version: {response.json().get('version', 'unknown')}")
+    except requests.exceptions.RequestException as e:
+        console.print(f"❌ [red]Ollama connection failed: {str(e)}[/]")
+        console.print("Please make sure Ollama is installed and running (https://ollama.ai/)")
     except Exception as e:
-        console.print(f"❌ System Status: [red]FAILED[/red] - {str(e)}")
+        console.print(f"❌ [red]An unexpected error occurred: {str(e)}[/]")
         sys.exit(1)
 
 

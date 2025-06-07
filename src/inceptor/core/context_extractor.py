@@ -51,7 +51,7 @@ class ContextExtractor:
         return context
 
     @staticmethod
-    def enrich_context(context: Dict, additional_info: Dict = None) -> Dict:
+    def enrich_context(context: Dict[str, Any], additional_info: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """Enriches context with additional information and sets defaults.
         
         Args:

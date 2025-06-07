@@ -19,7 +19,7 @@ class DreamArchitect:
         self.ollama = OllamaClient(ollama_url)
         self.context_extractor = ContextExtractor()
 
-    def inception(self, problem: str, max_levels: int = 3, additional_context: Dict = None) -> Solution:
+    def inception(self, problem: str, max_levels: int = 3, additional_context: Optional[Dict[str, Any]] = None) -> Solution:
         """Generate a multi-level architecture solution.
         
         Args:

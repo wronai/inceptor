@@ -175,24 +175,12 @@ disallow_untyped_defs = false
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-python_files = "test_*.py"
-python_classes = "Test*"
-python_functions = "test_*"
-addopts = [
-    "--verbose",
-    "--cov=inceptor",
-    "--cov-report=term-missing",
-    "--cov-report=html",
-    "--cov-report=xml",
-    "--cov-fail-under=80"
-]
-markers = [
-    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
-    "integration: marks tests as integration tests",
-    "unit: marks tests as unit tests",
-    "cli: marks tests as CLI tests",
-    "ollama: marks tests that require Ollama connection"
-]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v --import-mode=importlib --strict-markers --strict-config --doctest-modules --cov=inceptor --cov-report=term-missing --cov-report=xml --cov-fail-under=80"
+norecursedirs = [".git", ".tox", ".mypy_cache", ".pytest_cache", "__pycache__", "build", "dist"]
+filterwarnings = ["error", "ignore::DeprecationWarning"]
 
 [tool.coverage.run]
 source = ["src"]
